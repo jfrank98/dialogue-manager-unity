@@ -1,3 +1,4 @@
 # dialogue-manager-unity
 
-## No README yet, be patient you silly goose
+## This is still very early stage so no documentation yet, be patient you silly geese
+This works, but has no error handling :P
