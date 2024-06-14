@@ -26,6 +26,12 @@
 # Visual Studio cache directory
 .vs/
 
+# VS Code bs
+.vscode/
+
+# What is this
+.plastic/
+
 # Gradle cache directory
 .gradle/
 

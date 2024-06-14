@@ -1,0 +1,25 @@
+#start
+Name: Line 1
+Name: Line 2
+    - choice1
+    Name: Line 3
+    - choice2
+    Name: Line 4
+        - choice 4
+        Name: Line 5
+        - choice 5
+    - choice3
+$IF skip
+$SET var a string or something
+Name: Line 7
+Name: Line 8
+$ELSE
+$CALL VeryCoolMethod arg1Value,arg2Value,arg3Value
+Name: Line 9
+$END
+Name2: Line 10
+~END~
+
+#cringe
+Name: Line 11
+~END~
