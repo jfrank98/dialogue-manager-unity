@@ -48,35 +48,47 @@ public static class CodeInterpreter
     private static void HandleCall(string line)
     {
         var splitLine = line.Split(' ', 3);
-        var methodName = splitLine[1];
+        var callStr = splitLine[1];
+        var objStr = callStr.Split('.')[0];
+        var methodName = callStr.Split('.')[1];
         var args = splitLine[2].Split(',');
-        DialogueCodeReflection.CallMethod(DialogueManager.Instance, methodName, args);
+        object obj = DialogueCodeReflection.GetSingletonInstance(objStr);
+        DialogueCodeReflection.CallMethod(obj, methodName, args);
     }
 
     private static void HandleSet(string line)
     {
         var splitLine = line.Split(' ', 3);
-        var varName = splitLine[1];
-        var varValue = splitLine.Length > 2 ? splitLine[2] : string.Empty;
-        DialogueCodeReflection.SetFieldValue(GlobalVars.Instance, varName, varValue);
+        var assignmentStr = splitLine[1];
+        var objStr = assignmentStr.Split('.')[0];
+        var varStr = assignmentStr.Split('.')[1];
+        var varValue = splitLine.Length >= 2 ? splitLine[2] : string.Empty;
+        object obj = DialogueCodeReflection.GetSingletonInstance(objStr);
+        DialogueCodeReflection.SetFieldValue(obj, varStr, varValue);
     }
 
     private static void HandleEmit(string line)
     {
         var splitLine = line.Split(' ', 3);
-        var eventName = splitLine[1];
+        var eventStr = splitLine[1];
+        var objStr = eventStr.Split('.')[0];
+        var eventName = eventStr.Split('.')[1];
         var arg = splitLine.Length > 2 ? splitLine[2] : string.Empty;
-        DialogueCodeReflection.EmitEvent(DialogueManager.Instance, eventName, arg);
+        object obj = DialogueCodeReflection.GetSingletonInstance(objStr);
+        DialogueCodeReflection.EmitEvent(obj, eventName, arg);
     }
 
     private static void HandleIf(string line, GoTo goTo, StreamReader currentLine, CreateDialogueLine createDialogueLine)
     {
         var splitLine = line.Split(' ', 2);
-        var conditionVar = splitLine[1];
-        var isNot = conditionVar.StartsWith('!');
-        if (isNot) conditionVar = conditionVar[1..];
-
-        var condition = (bool)DialogueCodeReflection.GetFieldValue(GlobalVars.Instance, conditionVar);
+        var conditionStr = splitLine[1];
+        var objStr = conditionStr.Split('.')[0];
+        var varStr = conditionStr.Split('.')[1];
+        var isNot = objStr.StartsWith("!");
+        Debug.Log(objStr.Remove(0, 1));
+        if (isNot) objStr = objStr[1..];
+        object obj = DialogueCodeReflection.GetSingletonInstance(objStr);
+        var condition = (bool)DialogueCodeReflection.GetFieldValue(obj, varStr);
         if (isNot) condition = !condition;
 
         if (!condition) goTo("$ELSE");

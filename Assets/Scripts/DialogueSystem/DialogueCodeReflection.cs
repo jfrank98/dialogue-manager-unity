@@ -70,10 +70,13 @@ public class DialogueCodeReflection : MonoBehaviour
         Type type = obj.GetType();
         // Get the field information
         FieldInfo fieldInfo = type.GetField(fieldName);
-
         // Check if the field exists
         if (fieldInfo != null)
         {
+            // Get the type of the field
+            Type fieldType = fieldInfo.FieldType;
+            value = Convert.ChangeType(value, fieldType);
+
             // Set the value of the field
             fieldInfo.SetValue(obj, value);
         }

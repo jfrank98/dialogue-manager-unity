@@ -9,8 +9,8 @@ Name: Line 2
         Name: Line 5
         - choice 5
     - choice3
-$IF skip
-$SET var a string or something
+$IF !DialogueManager.skip
+$SET DialogueManager.test 12
 Name: Line 7
 Name: Line 8
 $ELSE

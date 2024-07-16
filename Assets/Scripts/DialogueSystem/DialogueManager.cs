@@ -35,6 +35,8 @@ public class DialogueManager : MonoBehaviour
     private List<DialogueLine> dialogueLines = new();
     private string currentTitle;
     private Stack<DialogueLine> dialogueStack = new();
+    public int test = 145;
+    public bool skip = false;
     private void Awake()
     {
         if (_instance == null)
@@ -157,6 +159,8 @@ public class DialogueManager : MonoBehaviour
                 if (line.isCommand)
                 {
                     CodeInterpreter.ExecuteCommand(line.text);
+                    Debug.Log("Command: " + line.text);
+                    Debug.Log(test);
                     GetNextLine(line.nextId);
                     return;
                 }

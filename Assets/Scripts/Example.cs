@@ -15,6 +15,9 @@ public class Example : MonoBehaviour
     public Transform contentContainer;
     public bool inDialogue = false;
     private List<GameObject> btnsToDestroy = new();
+    public float typingSpeed = 0.01f;
+    private Coroutine typingCoroutine;
+    private bool typing = false;
     void Start()
     {
         DialogueManager.Instance.onDialogueEnd.AddListener(OnDialogueEnd);
@@ -28,9 +31,15 @@ public class Example : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (inDialogue && Input.GetKeyDown(KeyCode.Space) && !waitingForChoice)
-        {
-            DialogueManager.Instance.GetNextLine(line.nextId);
+        if (Input.GetKeyDown(KeyCode.Space)) {
+            if (typing)
+            {
+                SkipTyping();
+            }
+            else if (inDialogue && !waitingForChoice)
+            {
+                DialogueManager.Instance.GetNextLine(line.nextId);
+            }
         }
     }
 
@@ -43,8 +52,34 @@ public class Example : MonoBehaviour
     private void OnNewDialogueLine(DialogueLine line)
     {
         this.line = line;
-        textMeshPro.text = line.characterName + ": " + line.text;
+        textMeshPro.text = "";
+        if (typingCoroutine != null)
+        {
+            StopCoroutine(typingCoroutine);
+        }
+        typingCoroutine = StartCoroutine(TypeLine(line.text));
         CreateChoiceButtons();
+    }
+
+    private IEnumerator TypeLine(string text)
+    {
+        typing = true;
+        foreach (char c in text)
+        {
+            textMeshPro.text += c;
+            yield return new WaitForSeconds(typingSpeed);
+        }
+        typing = false;
+    }
+
+    private void SkipTyping()
+    {
+        if (typingCoroutine != null)
+        {
+            StopCoroutine(typingCoroutine);
+        }
+        textMeshPro.text = line.text;
+        typing = false;
     }
 
     private void CreateChoiceButtons()
