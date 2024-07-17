@@ -89,7 +89,7 @@ public class DialogueManager : MonoBehaviour
             if (CheckIfEnd(trimmedLine)) {
                 break;
             }
-            isCommand = CodeInterpreter.CheckIfCode(trimmedLine, currentLine, CreateDialogueLine, GoTo);
+            isCommand = CommandProcessor.CheckIfCode(trimmedLine, currentLine, CreateDialogueLine, GoTo);
             if (!isCommand)
             {
                 if (trimmedLine.StartsWith("$"))
@@ -158,7 +158,7 @@ public class DialogueManager : MonoBehaviour
             {
                 if (line.isCommand)
                 {
-                    CodeInterpreter.ExecuteCommand(line.text);
+                    CommandProcessor.ExecuteCommand(line.text);
                     Debug.Log("Command: " + line.text);
                     Debug.Log(test);
                     GetNextLine(line.nextId);

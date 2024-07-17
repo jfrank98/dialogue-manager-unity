@@ -3,7 +3,7 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.Events;
 
-public static class CodeInterpreter
+public static class CommandProcessor
 {
     public delegate void CreateDialogueLine(string line, bool isCommand = false);
     public delegate void GoTo(string line);
@@ -52,8 +52,8 @@ public static class CodeInterpreter
         var objStr = callStr.Split('.')[0];
         var methodName = callStr.Split('.')[1];
         var args = splitLine[2].Split(',');
-        object obj = DialogueCodeReflection.GetSingletonInstance(objStr);
-        DialogueCodeReflection.CallMethod(obj, methodName, args);
+        object obj = ReflectionUtil.GetSingletonInstance(objStr);
+        ReflectionUtil.CallMethod(obj, methodName, args);
     }
 
     private static void HandleSet(string line)
@@ -63,8 +63,8 @@ public static class CodeInterpreter
         var objStr = assignmentStr.Split('.')[0];
         var varStr = assignmentStr.Split('.')[1];
         var varValue = splitLine.Length >= 2 ? splitLine[2] : string.Empty;
-        object obj = DialogueCodeReflection.GetSingletonInstance(objStr);
-        DialogueCodeReflection.SetFieldValue(obj, varStr, varValue);
+        object obj = ReflectionUtil.GetSingletonInstance(objStr);
+        ReflectionUtil.SetFieldValue(obj, varStr, varValue);
     }
 
     private static void HandleEmit(string line)
@@ -74,8 +74,8 @@ public static class CodeInterpreter
         var objStr = eventStr.Split('.')[0];
         var eventName = eventStr.Split('.')[1];
         var arg = splitLine.Length > 2 ? splitLine[2] : string.Empty;
-        object obj = DialogueCodeReflection.GetSingletonInstance(objStr);
-        DialogueCodeReflection.EmitEvent(obj, eventName, arg);
+        object obj = ReflectionUtil.GetSingletonInstance(objStr);
+        ReflectionUtil.EmitEvent(obj, eventName, arg);
     }
 
     private static void HandleIf(string line, GoTo goTo, StreamReader currentLine, CreateDialogueLine createDialogueLine)
@@ -87,21 +87,10 @@ public static class CodeInterpreter
         var isNot = objStr.StartsWith("!");
         Debug.Log(objStr.Remove(0, 1));
         if (isNot) objStr = objStr[1..];
-        object obj = DialogueCodeReflection.GetSingletonInstance(objStr);
-        var condition = (bool)DialogueCodeReflection.GetFieldValue(obj, varStr);
+        object obj = ReflectionUtil.GetSingletonInstance(objStr);
+        var condition = (bool)ReflectionUtil.GetFieldValue(obj, varStr);
         if (isNot) condition = !condition;
 
         if (!condition) goTo("$ELSE");
-
-        // while ((line = currentLine.ReadLine()) != null)
-        // {
-        //     if (line.StartsWith("$ELSE") || line.StartsWith("$END"))
-        //     {
-        //         if (line.StartsWith("$ELSE")) goTo("$END");
-        //         break;
-        //     }
-        //     if (line.CheckIfCode(currentLine, createDialogueLine, goTo)) continue;
-        //     createDialogueLine(line);
-        // }
     }
 }

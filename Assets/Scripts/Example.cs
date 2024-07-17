@@ -15,7 +15,7 @@ public class Example : MonoBehaviour
     public Transform contentContainer;
     public bool inDialogue = false;
     private List<GameObject> btnsToDestroy = new();
-    public float typingSpeed = 0.01f;
+    public float typingSpeed = 0.5f;
     private Coroutine typingCoroutine;
     private bool typing = false;
     void Start()

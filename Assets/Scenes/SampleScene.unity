@@ -157,6 +157,8 @@ MonoBehaviour:
   onNewDialogueLine:
     m_PersistentCalls:
       m_Calls: []
+  test: 145
+  skip: 0
 --- !u!4 &371304
 Transform:
   m_ObjectHideFlags: 0
@@ -466,6 +468,7 @@ MonoBehaviour:
   buttonPrefab: {fileID: 6587579336664877568, guid: 0be661e1e3e4a6041943fa48f4d601c5, type: 3}
   contentContainer: {fileID: 766082433}
   inDialogue: 0
+  typingSpeed: 0.05
 --- !u!224 &1247172537
 RectTransform:
   m_ObjectHideFlags: 0

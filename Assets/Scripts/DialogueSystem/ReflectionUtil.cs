@@ -3,7 +3,7 @@ using System.Reflection;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class DialogueCodeReflection : MonoBehaviour
+public class ReflectionUtil : MonoBehaviour
 {
     public static object GetSingletonInstance(string singletonClassName)
     {
